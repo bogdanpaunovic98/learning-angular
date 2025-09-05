@@ -1,0 +1,17 @@
+<div class="flex justify-center items-center h-full">
+  <div class="border-2 border-black rounded-md p-8 flex flex-col items-center">
+    <label>Login form</label>
+    <form class="flex flex-col gap-2" [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      <mat-form-field class="example-full-width">
+        <mat-label>Username</mat-label>
+        <input [formControl]="loginForm.controls.username" matInput />
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <mat-label>Password</mat-label>
+        <input [formControl]="loginForm.controls.password" matInput type="password" />
+      </mat-form-field>
+      <button mat-raised-button [disabled]="loginForm.invalid">Login</button>
+    </form>
+  </div>
+</div>
