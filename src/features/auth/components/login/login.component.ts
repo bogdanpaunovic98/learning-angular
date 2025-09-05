@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { LoginService } from '@src/features/auth/services/login.service';
 import { LoginResponse } from '@src/core/model/environment.model';
 import { LoadingService } from '@src/app/shared/services/loading.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'login',
@@ -31,17 +32,19 @@ export class Login {
   private loadingService = inject(LoadingService);
 
   onLogin(): void {
-    this.loadingService.show();
-    this.loginService.login(this.loginForm.getRawValue()).subscribe({
-      next: (response: LoginResponse) => {
-        console.log('Login successful:', response);
-        this.loadingService.hide();
-      },
-      error: (error: any) => {
-        console.error('Login failed:', error);
-        this.loadingService.hide();
-      },
-    });
+    this.loginService
+      .login(this.loginForm.getRawValue())
+      .pipe(
+        finalize(() => this.loadingService.hide()), // Always runs, success or error
+      )
+      .subscribe({
+        next: (response: LoginResponse) => {
+          console.log('Login successful:', response);
+        },
+        error: (error: any) => {
+          console.error('Login failed:', error);
+        },
+      });
   }
 
   get username() {
