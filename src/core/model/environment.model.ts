@@ -14,3 +14,17 @@ export interface LoginResponse {
   activated: boolean;
   role: string;
 }
+
+export interface RegisterRequest {
+  username: string;
+  password: {
+    newPassword: string;
+    newPasswordConfirm: string;
+  };
+  firstName: string;
+  lastName: string;
+  userContactInfo: {
+    email: string;
+    contactPhone: string;
+  };
+}
