@@ -5,8 +5,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 
-import { LoginService } from '@src/features/auth/services/login.service';
-import { LoginResponse } from '@src/core/model/environment.model';
+import { AuthService } from '@src/features/auth/services/auth.service';
+import { LoginResponse } from '@src/core/model/types.model';
 import { LoadingService } from '@src/app/shared/services/loading.service';
 import { finalize } from 'rxjs';
 
@@ -28,10 +28,11 @@ export class Login {
     }),
   });
 
-  private loginService = inject(LoginService);
+  private loginService = inject(AuthService);
   private loadingService = inject(LoadingService);
 
   onLogin(): void {
+    this.loadingService.show();
     this.loginService
       .login(this.loginForm.getRawValue())
       .pipe(
