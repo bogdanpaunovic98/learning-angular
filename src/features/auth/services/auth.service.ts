@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { LoginRequest, LoginResponse, RegisterRequest } from '@src/core/model/environment.model';
+import { LoginRequest, LoginResponse, RegisterRequest } from '@src/core/model/types.model';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +13,7 @@ export class AuthService {
     return this.http.post<LoginResponse>('/users/auth', credentials);
   }
 
-  register(payload: RegisterRequest): Observable<unknown> {
-    return this.http.post<unknown>('/users', payload);
-  } // Since the api just returns ok, I'dont know what to put here as return type
+  register(payload: RegisterRequest): Observable<string> {
+    return this.http.post('/users', payload, { responseType: 'text' });
+  }
 }

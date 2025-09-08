@@ -15,7 +15,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '@src/features/auth/services/auth.service';
 import { LoadingService } from '@src/app/shared/services/loading.service';
 import { finalize } from 'rxjs';
-import { RegisterRequest } from '@src/core/model/environment.model';
 
 @Component({
   selector: 'registration',
@@ -30,29 +29,33 @@ export class Registration {
         validators: [Validators.required],
         nonNullable: true,
       }),
-      newPassword: new FormControl('', {
+      password: new FormGroup({
+        newPassword: new FormControl('', {
+          validators: [Validators.required],
+          nonNullable: true,
+        }),
+        newPasswordConfirm: new FormControl('', {
+          validators: [Validators.required],
+          nonNullable: true,
+        }),
+      }),
+      firstName: new FormControl('', {
         validators: [Validators.required],
         nonNullable: true,
       }),
-      confirmNewPassword: new FormControl('', {
+      lastName: new FormControl('', {
         validators: [Validators.required],
         nonNullable: true,
       }),
-      firstname: new FormControl('', {
-        validators: [Validators.required],
-        nonNullable: true,
-      }),
-      lastname: new FormControl('', {
-        validators: [Validators.required],
-        nonNullable: true,
-      }),
-      email: new FormControl('', {
-        validators: [Validators.required, Validators.email],
-        nonNullable: true,
-      }),
-      contactPhone: new FormControl('', {
-        validators: [Validators.required],
-        nonNullable: true,
+      userContactInfo: new FormGroup({
+        email: new FormControl('', {
+          validators: [Validators.required, Validators.email],
+          nonNullable: true,
+        }),
+        contactPhone: new FormControl('', {
+          validators: [Validators.required],
+          nonNullable: true,
+        }),
       }),
     },
     {
@@ -74,30 +77,17 @@ export class Registration {
   private loadingService = inject(LoadingService);
 
   onRegister(): void {
-    const formValue = this.registrationForm.getRawValue();
-    const payload: RegisterRequest = {
-      username: formValue.username,
-      password: {
-        newPassword: formValue.newPassword,
-        newPasswordConfirm: formValue.confirmNewPassword,
-      },
-      firstName: formValue.firstname,
-      lastName: formValue.lastname,
-      userContactInfo: {
-        email: formValue.email,
-        contactPhone: formValue.contactPhone,
-      },
-    };
+    this.loadingService.show();
     this.authService
-      .register(payload)
+      .register(this.registrationForm.getRawValue())
       .pipe(
         finalize(() => this.loadingService.hide()), // Always runs, success or error
       )
       .subscribe({
-        next: (response: unknown) => {
+        next: (response: string) => {
           console.log('Registration successful:', response);
         },
-        error: (error: any) => {
+        error: (error: Object) => {
           console.error('Registration failed:', error);
         },
       });

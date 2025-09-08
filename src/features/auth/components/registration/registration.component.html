@@ -4,35 +4,50 @@
     <input [formControl]="registrationForm.controls.username" matInput />
   </mat-form-field>
 
-  <mat-form-field class="example-full-width">
-    <mat-label>New Password</mat-label>
-    <input [formControl]="registrationForm.controls.newPassword" matInput type="password" />
-  </mat-form-field>
+  <form class="flex flex-col gap-2" [formGroup]="registrationForm.controls.password">
+    <mat-form-field class="example-full-width">
+      <mat-label>New Password</mat-label>
+      <input
+        [formControl]="registrationForm.controls.password.controls.newPassword"
+        matInput
+        type="password"
+      />
+    </mat-form-field>
 
-  <mat-form-field class="example-full-width">
-    <mat-label>Confirm New Password</mat-label>
-    <input [formControl]="registrationForm.controls.confirmNewPassword" matInput type="password" />
-  </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <mat-label>Confirm New Password</mat-label>
+      <input
+        [formControl]="registrationForm.controls.password.controls.newPasswordConfirm"
+        matInput
+        type="password"
+      />
+    </mat-form-field>
+  </form>
 
   <mat-form-field class="example-full-width">
     <mat-label>First name</mat-label>
-    <input [formControl]="registrationForm.controls.firstname" matInput />
+    <input [formControl]="registrationForm.controls.firstName" matInput />
   </mat-form-field>
 
   <mat-form-field class="example-full-width">
     <mat-label>Last name</mat-label>
-    <input [formControl]="registrationForm.controls.lastname" matInput />
+    <input [formControl]="registrationForm.controls.lastName" matInput />
   </mat-form-field>
 
-  <mat-form-field class="example-full-width">
-    <mat-label>Email</mat-label>
-    <input [formControl]="registrationForm.controls.email" matInput />
-  </mat-form-field>
+  <form class="flex flex-col gap-2" [formGroup]="registrationForm.controls.userContactInfo">
+    <mat-form-field class="example-full-width">
+      <mat-label>Email</mat-label>
+      <input [formControl]="registrationForm.controls.userContactInfo.controls.email" matInput />
+    </mat-form-field>
 
-  <mat-form-field class="example-full-width">
-    <mat-label>Contact phone</mat-label>
-    <input [formControl]="registrationForm.controls.contactPhone" matInput />
-  </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <mat-label>Contact phone</mat-label>
+      <input
+        [formControl]="registrationForm.controls.userContactInfo.controls.contactPhone"
+        matInput
+      />
+    </mat-form-field>
+  </form>
 
   <button mat-raised-button [disabled]="registrationForm.invalid">Register</button>
 </form>

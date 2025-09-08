@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 
 import { AuthService } from '@src/features/auth/services/auth.service';
-import { LoginResponse } from '@src/core/model/environment.model';
+import { LoginResponse } from '@src/core/model/types.model';
 import { LoadingService } from '@src/app/shared/services/loading.service';
 import { finalize } from 'rxjs';
 
@@ -32,6 +32,7 @@ export class Login {
   private loadingService = inject(LoadingService);
 
   onLogin(): void {
+    this.loadingService.show();
     this.loginService
       .login(this.loginForm.getRawValue())
       .pipe(
