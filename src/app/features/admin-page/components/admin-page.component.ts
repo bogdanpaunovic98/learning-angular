@@ -13,11 +13,8 @@ export class AdminPage {
 
   onLogout() {
     this.adminPageService.logout().subscribe({
-      next: (response: string) => {
+      next: () => {
         console.log('Logged out');
-      },
-      error: (error: Object) => {
-        console.log('Error happened', error);
       },
     });
   }

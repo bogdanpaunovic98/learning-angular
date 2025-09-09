@@ -28,3 +28,11 @@ export interface RegisterRequest {
   lastName: string;
   userContactInfo: UserContactInfo;
 }
+
+export interface LoggedInUserInfo {
+  username: string;
+  firstName: string;
+  lastName: string;
+  activated: boolean;
+  role: string;
+}
