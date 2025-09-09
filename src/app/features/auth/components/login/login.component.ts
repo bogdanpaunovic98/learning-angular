@@ -5,8 +5,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 
-import { AuthService } from '@src/features/auth/services/auth.service';
-import { LoginResponse } from '@src/core/model/types.model';
+import { AuthService } from '@src/app/features/auth/services/auth.service';
+import { LoginResponse } from '@src/app/core/model/types.model';
 import { LoadingService } from '@src/app/shared/services/loading.service';
 import { finalize } from 'rxjs';
 
