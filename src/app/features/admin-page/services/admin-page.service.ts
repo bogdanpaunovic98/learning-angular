@@ -9,6 +9,6 @@ export class AdminPageService {
   private http = inject(HttpClient);
 
   logout(): Observable<string> {
-    return this.http.post<string>('/users/logout', { responseType: 'text' });
+    return this.http.post('/users/logout', {}, { responseType: 'text' });
   }
 }

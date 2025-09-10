@@ -15,6 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '@src/app/features/auth/services/auth.service';
 import { LoadingService } from '@src/app/shared/services/loading.service';
 import { finalize } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'registration',
@@ -23,6 +24,7 @@ import { finalize } from 'rxjs';
   imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule],
 })
 export class Registration {
+  private router = inject(Router);
   registrationForm = new FormGroup(
     {
       username: new FormControl('', {
@@ -85,10 +87,7 @@ export class Registration {
       )
       .subscribe({
         next: (response: string) => {
-          console.log('Registration successful:', response);
-        },
-        error: (error: Object) => {
-          console.error('Registration failed:', error);
+          this.router.navigate(['/admin-page']);
         },
       });
   }

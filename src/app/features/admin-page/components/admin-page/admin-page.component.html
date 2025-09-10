@@ -1,0 +1,29 @@
+<mat-sidenav-container class="h-full">
+  <mat-sidenav
+    #sidenav
+    mode="side"
+    [opened]="true"
+    [ngClass]="{ 'sidenav-collapsed': !expanded(), 'sidenav-expanded': expanded() }"
+    class="sidenav-custom"
+  >
+    <mat-action-list>
+      <button mat-raised-button (click)="toggleSidenav()" class="sidenav-button">
+        <mat-icon class="sidenav-icon" fontIcon="menu"></mat-icon>
+      </button>
+
+      <a mat-list-item routerLink="analytics">Test 1 </a>
+      <a mat-list-item routerLink="settings">Test 2 </a>
+    </mat-action-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content
+    [ngClass]="{ 'sidenav-content-collapsed': !expanded(), 'sidenav-content-expanded': expanded() }"
+    class="sidenav-content"
+  >
+    <header class="header">
+      <h1>Header</h1>
+      <button mat-raised-button (click)="onLogout()">Logout</button>
+    </header>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
