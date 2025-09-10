@@ -1,11 +1,11 @@
-import { Component, inject, signal, WritableSignal } from '@angular/core';
+import { Component, signal, computed } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { AdminPageService } from '@src/app/features/admin-page/services/admin-page.service';
 import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
 import { MatActionList, MatListItem } from '@angular/material/list';
 import { NgClass } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterLink, RouterOutlet, Router } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
+import { AdminPageHeader } from '@src/app/features/admin-page/components/admin-page-header/admin-page-header.component';
 
 @Component({
   selector: 'admin-page',
@@ -23,20 +23,19 @@ import { RouterLink, RouterOutlet, Router } from '@angular/router';
     MatIconModule,
     RouterOutlet,
     RouterLink,
+    AdminPageHeader,
   ],
 })
 export class AdminPage {
-  adminPageService = inject(AdminPageService);
   expanded = signal(false);
-  private router = inject(Router);
 
-  toggleSidenav = () => this.expanded.set(!this.expanded());
-
-  onLogout() {
-    this.adminPageService.logout().subscribe({
-      next: () => {
-        this.router.navigate(['/authenticate']);
-      },
-    });
+  toggleSidenav() {
+    this.expanded.set(!this.expanded());
   }
+
+  sidenavClass = computed(() => (this.expanded() ? 'sidenav-expanded' : 'sidenav-collapsed'));
+
+  sidenavContentClass = computed(() =>
+    this.expanded() ? 'sidenav-content-expanded' : 'sidenav-content-collapsed',
+  );
 }

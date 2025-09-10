@@ -1,10 +1,3 @@
-.sidenav-custom {
-  transition: width 0.3s ease-in-out !important;
-  overflow-x: hidden;
-  background: #3498db;
-  border-radius: 0;
-}
-
 .sidenav-expanded {
   width: 250px !important;
 }
@@ -19,28 +12,4 @@
 
 .sidenav-content-collapsed {
   margin-left: 74px !important;
-}
-
-.sidenav-icon {
-  font-size: 24px !important;
-  width: 24px !important;
-  height: 24px !important;
-  margin: 0 !important;
-}
-
-.sidenav-content {
-  transition: margin-left 0.3s ease-in-out !important;
-}
-
-.sidenav-button {
-  padding: 0;
-}
-
-.header {
-  height: 50px;
-  width: 100%;
-  background: aqua;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 }
