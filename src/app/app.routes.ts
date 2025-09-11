@@ -1,5 +1,6 @@
 import { Router, Routes } from '@angular/router';
 import { adminPageGuard } from '@src/app/features/admin-page/guards/admin-page.guard';
+import { SettingsPageComponent } from '@src/app/features/admin-page/components/settings-page/settings-page.component';
 
 export const routes: Routes = [
   {
@@ -18,9 +19,25 @@ export const routes: Routes = [
   {
     path: 'admin-page',
     loadComponent: () =>
-      import('@src/app/features/admin-page/components/admin-page.component').then(
+      import('@src/app/features/admin-page/components/admin-page/admin-page.component').then(
         (c) => c.AdminPage,
       ),
     canActivate: [adminPageGuard],
+    children: [
+      {
+        path: 'settings',
+        loadComponent: () =>
+          import(
+            '@src/app/features/admin-page/components/settings-page/settings-page.component'
+          ).then((c) => c.SettingsPageComponent),
+      },
+      {
+        path: 'analytics',
+        loadComponent: () =>
+          import(
+            '@src/app/features/admin-page/components/analytics-page/analytics-page.component'
+          ).then((c) => c.AnalyticsPageComponent),
+      },
+    ],
   },
 ];

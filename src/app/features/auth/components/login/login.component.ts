@@ -9,6 +9,7 @@ import { AuthService } from '@src/app/features/auth/services/auth.service';
 import { LoginResponse } from '@src/app/core/model/types.model';
 import { LoadingService } from '@src/app/shared/services/loading.service';
 import { finalize } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'login',
@@ -28,6 +29,8 @@ export class Login {
     }),
   });
 
+  private router = inject(Router);
+
   private loginService = inject(AuthService);
   private loadingService = inject(LoadingService);
 
@@ -39,20 +42,9 @@ export class Login {
         finalize(() => this.loadingService.hide()), // Always runs, success or error
       )
       .subscribe({
-        next: (response: LoginResponse) => {
-          console.log('Login successful:', response);
-        },
-        error: (error: any) => {
-          console.error('Login failed:', error);
+        next: () => {
+          this.router.navigate(['/admin-page']);
         },
       });
-  }
-
-  get username() {
-    return this.loginForm.controls.username;
-  }
-
-  get password() {
-    return this.loginForm.controls.password;
   }
 }
