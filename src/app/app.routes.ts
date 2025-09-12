@@ -1,6 +1,5 @@
-import { Router, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { adminPageGuard } from '@src/app/features/admin-page/guards/admin-page.guard';
-import { SettingsPageComponent } from '@src/app/features/admin-page/components/settings-page/settings-page.component';
 
 export const routes: Routes = [
   {
@@ -37,6 +36,13 @@ export const routes: Routes = [
           import(
             '@src/app/features/admin-page/components/analytics-page/analytics-page.component'
           ).then((c) => c.AnalyticsPageComponent),
+      },
+      {
+        path: 'products',
+        loadComponent: () =>
+          import(
+            '@src/app/features/admin-page/components/products/components/products/products.component'
+          ).then((c) => c.Products),
       },
     ],
   },

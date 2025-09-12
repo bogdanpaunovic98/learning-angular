@@ -36,3 +36,19 @@ export interface LoggedInUserInfo {
   activated: boolean;
   role: string;
 }
+
+export type ProductStatus = 'AVAILABLE' | 'NOT_AVAILABLE';
+
+export interface Product {
+  id: number;
+  name: string;
+  price: number;
+  coverPhotoUrl: string;
+  brandName: string;
+  status: ProductStatus;
+}
+
+export interface ProductPagination {
+  page: number;
+  size: number;
+}
