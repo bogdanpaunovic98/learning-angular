@@ -27,11 +27,8 @@ export class Paginator {
     this.paginationUpdated.emit(this.pagination());
   }
 
-  sizeSignal = computed(() => this.pagination().size);
-
   constructor() {
     effect(() => {
-      const size = this.sizeSignal();
       this.paginationUpdated.emit(this.pagination());
     });
   }

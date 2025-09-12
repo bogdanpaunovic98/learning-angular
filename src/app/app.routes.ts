@@ -1,6 +1,5 @@
-import { Router, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { adminPageGuard } from '@src/app/features/admin-page/guards/admin-page.guard';
-import { SettingsPageComponent } from '@src/app/features/admin-page/components/settings-page/settings-page.component';
 
 export const routes: Routes = [
   {
