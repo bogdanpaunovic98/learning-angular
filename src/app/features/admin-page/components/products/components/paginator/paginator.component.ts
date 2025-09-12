@@ -41,7 +41,6 @@ export class Paginator {
     this.pagination.update((current) => ({
       ...current,
       size: value,
-      page: 0,
     }));
   }
 }
