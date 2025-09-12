@@ -1,4 +1,4 @@
-import { Component, computed, EventEmitter, Output, signal, effect, input } from '@angular/core';
+import { Component, EventEmitter, Output, signal, effect, input } from '@angular/core';
 import { MatFormField } from '@angular/material/form-field';
 import { ProductPagination } from '@src/app/core/model/types.model';
 import { MatSelectModule } from '@angular/material/select';
