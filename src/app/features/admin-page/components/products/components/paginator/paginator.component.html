@@ -1,0 +1,19 @@
+<div class="flex items-center gap-2 justify-end">
+  <mat-form-field class="w-[6rem]">
+    <mat-select [(value)]="selectedSize">
+      @for (size of sizes; track size) {
+        <mat-option [value]="size">{{ size }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <button mat-raised-button [disabled]="pagination().page === 0" (click)="updatePagination(-1)">
+    <mat-icon fontIcon="chevron_left" class="!m-0"></mat-icon>
+  </button>
+  <button
+    mat-raised-button
+    [disabled]="numberOfProducts() < pagination().size"
+    (click)="updatePagination(1)"
+  >
+    <mat-icon fontIcon="chevron_right" class="!m-0"></mat-icon>
+  </button>
+</div>

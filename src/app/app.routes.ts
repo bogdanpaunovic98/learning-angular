@@ -38,6 +38,13 @@ export const routes: Routes = [
             '@src/app/features/admin-page/components/analytics-page/analytics-page.component'
           ).then((c) => c.AnalyticsPageComponent),
       },
+      {
+        path: 'products',
+        loadComponent: () =>
+          import(
+            '@src/app/features/admin-page/components/products/components/products/products.component'
+          ).then((c) => c.Products),
+      },
     ],
   },
 ];
