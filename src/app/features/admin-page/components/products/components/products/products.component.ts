@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -12,59 +12,68 @@ import {
   MatTable,
 } from '@angular/material/table';
 import { ProductsService } from '@src/app/features/admin-page/components/products/services/products.service';
-import { Product, ProductPagination, ProductStatus } from '@src/app/core/model/types.model';
+import { Product, ProductStatus } from '@src/app/core/model/types.model';
 import { LoadingService } from '@src/app/shared/services/loading.service';
-import { finalize } from 'rxjs';
-import { Paginator } from '@src/app/features/admin-page/components/products/components/paginator/paginator.component';
+import { BehaviorSubject, catchError, finalize, map, Observable, of, scan, switchMap } from 'rxjs';
+import { InfiniteScrollDirective } from '@src/app/shared/directives/infinite-scroll.directive';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'products',
   templateUrl: 'products.component.html',
+  styleUrl: 'products.component.scss',
   imports: [
     MatTable,
     MatColumnDef,
     MatHeaderCell,
     MatCell,
-    Paginator,
     MatCellDef,
     MatHeaderCellDef,
     MatHeaderRow,
     MatHeaderRowDef,
     MatRow,
     MatRowDef,
+    InfiniteScrollDirective,
+    AsyncPipe,
   ],
 })
-export class Products {
+export class Products implements OnInit {
   displayedColumns: string[] = ['name', 'price', 'photo', 'brand', 'status'];
+
   productStatus: Record<ProductStatus, string> = {
     AVAILABLE: 'Available',
     NOT_AVAILABLE: 'Not Available',
   };
 
-  products = signal<Product[]>([]);
-  productsCount = computed(() => this.products().length);
+  page$ = new BehaviorSubject(0);
+  totalNumberOfPages = signal<number>(0);
 
   productsService = inject(ProductsService);
   loadingService = inject(LoadingService);
 
-  handlePaginationUpdate(updatedPagination: ProductPagination) {
-    this.getProducts(updatedPagination);
-  }
+  products$: Observable<Product[]> = this.page$.pipe(
+    switchMap((newValue) => this.getProducts(newValue)),
+    scan((acc, curr) => acc.concat(curr), [] as Product[]),
+  );
 
-  getProducts(pagination: ProductPagination) {
+  getProducts(page: number = 0): Observable<Product[]> {
     this.loadingService.show();
-    this.productsService
-      .fetchProducts(pagination)
-      .pipe(finalize(() => this.loadingService.hide()))
-      .subscribe({
-        next: (response) => {
-          this.products.set(response);
-        },
-      });
+    return this.productsService.fetchProducts(page).pipe(
+      map((response) => {
+        this.totalNumberOfPages.set(Number(response.headers.get('X-Total-Pages')) || 0);
+        return response.body || ([] as Product[]);
+      }),
+      catchError((error) => {
+        console.error('Error while fetching products: ', error);
+        this.totalNumberOfPages.set(0);
+        return of([] as Product[]);
+      }),
+      finalize(() => this.loadingService.hide()),
+    );
   }
 
   ngOnInit() {
-    this.getProducts({ page: 0, size: 10 });
+    this.page$.next(0);
   }
 
   getProductStatus(status: ProductStatus) {

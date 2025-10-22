@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Product, ProductPagination } from '@src/app/core/model/types.model';
+import { Product } from '@src/app/core/model/types.model';
 
 @Injectable({
   providedIn: 'root',
@@ -9,8 +9,10 @@ import { Product, ProductPagination } from '@src/app/core/model/types.model';
 export class ProductsService {
   private http = inject(HttpClient);
 
-  fetchProducts(pagination: ProductPagination): Observable<Product[]> {
-    const params = new HttpParams().set('page', pagination.page).set('size', pagination.size);
-    return this.http.get<Product[]>('/products', { params });
+  fetchProducts(page: number): Observable<HttpResponse<Product[]>> {
+    return this.http.get<Product[]>('/products', {
+      params: { page, size: 20 },
+      observe: 'response',
+    });
   }
 }
