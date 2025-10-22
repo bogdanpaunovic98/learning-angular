@@ -14,9 +14,8 @@ import {
 import { ProductsService } from '@src/app/features/admin-page/components/products/services/products.service';
 import { Product, ProductStatus } from '@src/app/core/model/types.model';
 import { LoadingService } from '@src/app/shared/services/loading.service';
-import { BehaviorSubject, catchError, finalize, map, Observable, of, scan, switchMap } from 'rxjs';
+import { finalize } from 'rxjs';
 import { InfiniteScrollDirective } from '@src/app/shared/directives/infinite-scroll.directive';
-import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'products',
@@ -34,7 +33,6 @@ import { AsyncPipe } from '@angular/common';
     MatRow,
     MatRowDef,
     InfiniteScrollDirective,
-    AsyncPipe,
   ],
 })
 export class Products implements OnInit {
@@ -45,35 +43,32 @@ export class Products implements OnInit {
     NOT_AVAILABLE: 'Not Available',
   };
 
-  page$ = new BehaviorSubject(0);
   totalNumberOfPages = signal<number>(0);
+  products = signal<Product[]>([]);
 
   productsService = inject(ProductsService);
   loadingService = inject(LoadingService);
 
-  products$: Observable<Product[]> = this.page$.pipe(
-    switchMap((newValue) => this.getProducts(newValue)),
-    scan((acc, curr) => acc.concat(curr), [] as Product[]),
-  );
-
-  getProducts(page: number = 0): Observable<Product[]> {
+  getProducts(page: number) {
     this.loadingService.show();
-    return this.productsService.fetchProducts(page).pipe(
-      map((response) => {
-        this.totalNumberOfPages.set(Number(response.headers.get('X-Total-Pages')) || 0);
-        return response.body || ([] as Product[]);
-      }),
-      catchError((error) => {
-        console.error('Error while fetching products: ', error);
-        this.totalNumberOfPages.set(0);
-        return of([] as Product[]);
-      }),
-      finalize(() => this.loadingService.hide()),
-    );
+    this.productsService
+      .fetchProducts(page)
+      .pipe(finalize(() => this.loadingService.hide()))
+      .subscribe({
+        next: (response) => {
+          this.totalNumberOfPages.set(Number(response.headers.get('X-Total-Pages')) || 0);
+          this.products.update((prev) => prev.concat(response.body || []));
+        },
+        error: (error) => {
+          console.error('Error while fetching products: ', error);
+          this.totalNumberOfPages.set(0);
+          this.products.set([]);
+        },
+      });
   }
 
   ngOnInit() {
-    this.page$.next(0);
+    this.getProducts(0);
   }
 
   getProductStatus(status: ProductStatus) {
