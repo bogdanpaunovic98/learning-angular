@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
   selector: 'admin-page-header',
   standalone: true,
   templateUrl: 'admin-page-header.component.html',
+  styleUrl: 'admin-page-header.component.scss',
   imports: [MatButtonModule, MatIconModule],
 })
 export class AdminPageHeader {

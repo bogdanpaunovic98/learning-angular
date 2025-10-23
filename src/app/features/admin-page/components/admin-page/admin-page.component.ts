@@ -2,7 +2,6 @@ import { Component, signal, computed } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
 import { MatActionList, MatListItem } from '@angular/material/list';
-import { NgClass } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { AdminPageHeader } from '@src/app/features/admin-page/components/admin-page-header/admin-page-header.component';
@@ -19,7 +18,6 @@ import { AdminPageHeader } from '@src/app/features/admin-page/components/admin-p
     MatSidenavContent,
     MatActionList,
     MatListItem,
-    NgClass,
     MatIconModule,
     RouterOutlet,
     RouterLink,
