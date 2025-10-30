@@ -5,3 +5,8 @@
   height: calc(100vh - 3rem);
   overflow-x: auto;
 }
+
+.button-container {
+  display: flex;
+  gap: 1rem;
+}
