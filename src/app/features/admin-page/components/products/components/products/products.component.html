@@ -1,9 +1,10 @@
-<div
-  class="products-container"
-  infiniteScroll
-  (nextPage)="getProducts($event)"
-  [numberOfPages]="totalNumberOfPages()"
->
+<div class="products-container" infiniteScroll (atBottom)="getNextPage()">
+  <div class="button-container">
+    <button mat-button matButton="outlined" (click)="openDialog()">Filters</button>
+    @if (filtersApplied) {
+      <button mat-button matButton="filled" (click)="resetFilters()">Reset filters</button>
+    }
+  </div>
   @if (products() && products().length) {
     <table mat-table [dataSource]="products()">
       <ng-container matColumnDef="name">
@@ -33,8 +34,8 @@
         </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let _row; columns: displayedColumns"></tr>
+      <tr mat-header-row *matHeaderRowDef="DISPLAYED_COLUMNS"></tr>
+      <tr mat-row *matRowDef="let _row; columns: DISPLAYED_COLUMNS"></tr>
     </table>
   } @else {
     <div>No products...</div>

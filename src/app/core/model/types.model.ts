@@ -1,3 +1,5 @@
+import { FormControl } from '@angular/forms';
+
 export interface LoginRequest {
   username: string;
   password: string;
@@ -48,7 +50,37 @@ export interface Product {
   status: ProductStatus;
 }
 
-export interface ProductPagination {
-  page: number;
-  size: number;
+export interface Option {
+  value: string;
+  label: string;
+}
+
+export interface ProductFilterForm {
+  search: FormControl<string | null>;
+  category: FormControl<string | null>;
+  subcategory: FormControl<string | null>;
+  brand: FormControl<string | null>;
+}
+
+export interface ProductFilterFormValueType {
+  search: string | null;
+  category: string | null;
+  subcategory: string | null;
+  brand: string | null;
+}
+
+export interface Brand {
+  id: number;
+  brandName: string;
+}
+
+export interface Subcategory {
+  id: number;
+  subCategoryName: string;
+}
+
+export interface Category {
+  id: number;
+  categoryName: string;
+  subCategories: Subcategory[];
 }

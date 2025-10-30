@@ -1,4 +1,4 @@
-@if (loadingService.loading$ | async) {
+@if (loadingService.loading()) {
   <div class="loader-overlay">
     <div class="loader-spinner">
       <div class="spinner"></div>
