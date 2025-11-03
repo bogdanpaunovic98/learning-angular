@@ -6,37 +6,41 @@
       <input matInput formControlName="search" />
     </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>Categories</mat-label>
-      <mat-select formControlName="category">
-        @for (category of categories(); track category.id) {
-          <mat-option [value]="category.categoryName">{{ category.categoryName }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
+    @let brandsAndCategories = brandsAndCategories$ | async;
+    @if (brandsAndCategories) {
+      <mat-form-field>
+        <mat-label>Categories</mat-label>
+        <mat-select formControlName="category">
+          @for (category of brandsAndCategories.categories; track category.id) {
+            <mat-option [value]="category.categoryName">{{ category.categoryName }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>Subcategories</mat-label>
-      <mat-select formControlName="subcategory">
-        @for (
-          subcategory of categories() | filterByCategory: data.filterForm.controls.category.value;
-          track subcategory.id
-        ) {
-          <mat-option [value]="subcategory.subCategoryName">
-            {{ subcategory.subCategoryName }}
-          </mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
+      <mat-form-field>
+        <mat-label>Subcategories</mat-label>
+        <mat-select formControlName="subcategory">
+          @for (
+            subcategory of brandsAndCategories.categories
+              | filterByCategory: data.filterForm.controls.category.value;
+            track subcategory.id
+          ) {
+            <mat-option [value]="subcategory.subCategoryName">
+              {{ subcategory.subCategoryName }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>Brands</mat-label>
-      <mat-select formControlName="brand">
-        @for (brand of brands(); track brand.id) {
-          <mat-option [value]="brand.brandName">{{ brand.brandName }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
+      <mat-form-field>
+        <mat-label>Brands</mat-label>
+        <mat-select formControlName="brand">
+          @for (brand of brandsAndCategories.brands; track brand.id) {
+            <mat-option [value]="brand.brandName">{{ brand.brandName }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
     <div class="button-container">
       <button mat-button mat-dialog-close type="button" matButton="outlined">Cancel</button>
       <button mat-button [disabled]="data.filterForm.invalid" type="submit" matButton="filled">

@@ -11,6 +11,7 @@ import { ProductsService } from '@src/app/features/admin-page/components/product
 import { LoadingService } from '@src/app/shared/services/loading.service';
 import { Brand } from '@src/app/core/model/types.model';
 import { FilterByCategoryPipe } from '@src/app/features/admin-page/components/products/pipes/filter-by-category-pipe';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'products-filter-form',
@@ -26,40 +27,21 @@ import { FilterByCategoryPipe } from '@src/app/features/admin-page/components/pr
     ReactiveFormsModule,
     MatDialogClose,
     FilterByCategoryPipe,
+    AsyncPipe,
   ],
 })
-export class ProductsFilterForm implements OnInit {
+export class ProductsFilterForm {
   productsService = inject(ProductsService);
   loadingService = inject(LoadingService);
   dialogRef = inject(MatDialogRef);
   data = inject(MAT_DIALOG_DATA);
 
-  categories = signal<Category[]>([]);
-  brands = signal<Brand[]>([]);
+  brandsAndCategories$ = forkJoin({
+    brands: this.productsService.fetchBrands(),
+    categories: this.productsService.fetchCategories(),
+  }).pipe(finalize(() => this.loadingService.hide()));
 
   handleSubmit() {
     if (this.data.filterForm.valid) this.dialogRef.close('Apply');
-  }
-
-  ngOnInit() {
-    this.getBrandsAndCategories();
-  }
-
-  getBrandsAndCategories() {
-    this.loadingService.show();
-    forkJoin({
-      brands: this.productsService.fetchBrands(),
-      categories: this.productsService.fetchCategories(),
-    })
-      .pipe(finalize(() => this.loadingService.hide()))
-      .subscribe({
-        next: (response) => {
-          this.brands.set(response.brands);
-          this.categories.set(response.categories);
-        },
-        error: (error) => {
-          console.error('Error while fetching brands and categories', error);
-        },
-      });
   }
 }
