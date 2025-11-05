@@ -1,0 +1,20 @@
+.container {
+  padding: 1rem 2rem 2rem 2rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.filter-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.button-container {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
