@@ -1,0 +1,10 @@
+<div class="container">
+  <h3 class="title">Delete {{ data.productName }}</h3>
+  <p class="paragraph">Are you sure you want to delete {{ data.productName }}?</p>
+  <div class="button-container">
+    <button mat-button mat-dialog-close type="button" matButton="outlined">Cancel</button>
+    <button mat-button type="button" matButton="filled" (click)="dialogRef.close('Confirm')">
+      Confirm
+    </button>
+  </div>
+</div>

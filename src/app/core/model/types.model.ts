@@ -84,3 +84,49 @@ export interface Category {
   categoryName: string;
   subCategories: Subcategory[];
 }
+
+export interface EditProductFormI {
+  name: FormControl<string>;
+  price: FormControl<number>;
+  quantity: FormControl<number>;
+}
+
+export interface ProductSubCategory {
+  id: number;
+  subCategoryName: string;
+  category: Partial<Category>;
+}
+
+export interface ProductData {
+  id: number;
+  name: string;
+  price: number;
+  quantity: number;
+  images: string[];
+  brand: Brand;
+  productSubCategory: ProductSubCategory;
+}
+
+export interface ProductPayload {
+  name: string;
+  price: number;
+  quantity: number;
+  brand: {
+    id: number;
+  };
+  productSubCategory: {
+    id: number;
+  };
+}
+
+export interface ProductPayloadFormControlValues {
+  name: FormControl<string>;
+  price: FormControl<number | null>;
+  quantity: FormControl<number>;
+  brand: FormControl<{ id: number } | null>;
+  productSubCategory: FormControl<{ id: number } | null>;
+}
+
+export interface UpdateProductPayload extends ProductPayload {
+  id: string;
+}

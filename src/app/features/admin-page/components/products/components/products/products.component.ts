@@ -14,14 +14,16 @@ import {
 import { ProductsService } from '@src/app/features/admin-page/components/products/services/products.service';
 import {
   Product,
+  ProductData,
   ProductFilterForm,
   ProductFilterFormValueType,
   ProductStatus,
+  UpdateProductPayload,
 } from '@src/app/core/model/types.model';
 import { LoadingService } from '@src/app/shared/services/loading.service';
 import { finalize } from 'rxjs';
 import { InfiniteScrollDirective } from '@src/app/shared/directives/infinite-scroll.directive';
-import { MatButton } from '@angular/material/button';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ProductsFilterForm } from '@src/app/features/admin-page/components/products/components/products-filter-form/products-filter-form.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -29,6 +31,10 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { filterFormValidator } from '@src/app/features/admin-page/components/products/validators/filter-form.validator';
 import { filterCfg } from '@src/app/features/admin-page/components/products/utils/query-config-record';
 import { CriteriaBuilder } from '@src/app/features/admin-page/components/products/utils/query-builder/models/CriteriaBuilder';
+import { MatIcon } from '@angular/material/icon';
+import { DeleteProductDialog } from '@src/app/features/admin-page/components/products/components/delete-product-dialog/delete-product-dialog.component';
+import { EditProductForm } from '@src/app/features/admin-page/components/products/components/edit-product-form/edit-product-form.component';
+import { AddProductForm } from '@src/app/features/admin-page/components/products/components/add-product-form/add-product-form.component';
 
 @Component({
   selector: 'products',
@@ -47,10 +53,12 @@ import { CriteriaBuilder } from '@src/app/features/admin-page/components/product
     MatRowDef,
     InfiniteScrollDirective,
     MatButton,
+    MatIconButton,
+    MatIcon,
   ],
 })
 export class Products implements OnInit {
-  DISPLAYED_COLUMNS: string[] = ['name', 'price', 'photo', 'brand', 'status'];
+  DISPLAYED_COLUMNS: string[] = ['name', 'price', 'photo', 'brand', 'status', 'actions'];
 
   productStatus: Record<ProductStatus, string> = {
     AVAILABLE: 'Available',
@@ -128,7 +136,7 @@ export class Products implements OnInit {
     return status === 'AVAILABLE' ? 'text-green-500' : 'text-red-500';
   }
 
-  openDialog() {
+  openFilterDialog() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.data = {
@@ -176,5 +184,107 @@ export class Products implements OnInit {
       this.currentPage += 1;
       this.getProducts();
     }
+  }
+
+  openDeleteDialog(productId: number, productName: string) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.data = {
+      productName,
+    };
+
+    const dialogRef = this.dialog.open(DeleteProductDialog, dialogConfig);
+
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((data: string) => {
+        if (data === 'Confirm') {
+          this.loadingService.show();
+          this.productsService.deleteProduct(productId).subscribe({
+            next: () => {
+              this.resetFilters();
+            },
+            error: (error) => {
+              console.error('Error while deleting the product: ', error);
+              this.loadingService.hide();
+            },
+          });
+        }
+      });
+  }
+
+  openEditDialog(productId: number) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.data = {
+      productId,
+    };
+
+    const dialogRef = this.dialog.open(EditProductForm, dialogConfig);
+
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((data: ProductData | string) => {
+        if (typeof data !== 'string') {
+          const payload = this.transformProductDataIntoPayload(data);
+          this.updateProduct(payload);
+        }
+      });
+  }
+
+  updateProduct(payload: UpdateProductPayload) {
+    this.loadingService.show();
+    this.productsService
+      .updateProduct(payload)
+      .pipe(finalize(() => this.loadingService.hide()))
+      .subscribe({
+        next: () => {
+          this.resetFilters();
+        },
+        error: (error) => {
+          console.error('Error while updating the product: ', error);
+        },
+      });
+  }
+
+  transformProductDataIntoPayload(data: ProductData): UpdateProductPayload {
+    const payload: UpdateProductPayload = {
+      id: '',
+      productSubCategory: {
+        id: 0,
+      },
+      brand: {
+        id: 0,
+      },
+      name: '',
+      price: 0,
+      quantity: 0,
+    };
+    payload.id = data.id.toString();
+    payload.productSubCategory.id = data.productSubCategory.id;
+    payload.brand.id = data.brand.id;
+    payload.name = data.name;
+    payload.price = data.price;
+    payload.quantity = data.quantity;
+    return payload;
+  }
+
+  openAddProductsDialog() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.maxWidth = 'none';
+    dialogConfig.width = '90%';
+    dialogConfig.autoFocus = false;
+
+    const dialogRef = this.dialog.open(AddProductForm, dialogConfig);
+
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((data: any) => {
+        //
+      });
   }
 }
