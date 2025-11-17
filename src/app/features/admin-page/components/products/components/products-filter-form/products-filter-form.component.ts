@@ -42,6 +42,6 @@ export class ProductsFilterForm {
   }).pipe(finalize(() => this.loadingService.hide()));
 
   handleSubmit() {
-    if (this.data.filterForm.valid) this.dialogRef.close('Apply');
+    this.dialogRef.close('Apply');
   }
 }
