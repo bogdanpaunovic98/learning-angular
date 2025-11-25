@@ -5,6 +5,8 @@ import { MatActionList, MatListItem } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { AdminPageHeader } from '@src/app/features/admin-page/components/admin-page-header/admin-page-header.component';
+import { SidebarLink } from '@src/app/core/model/types.model';
+import { LayoutComponent } from '@src/app/shared/components/layout/layout.component';
 
 @Component({
   selector: 'admin-page',
@@ -22,10 +24,17 @@ import { AdminPageHeader } from '@src/app/features/admin-page/components/admin-p
     RouterOutlet,
     RouterLink,
     AdminPageHeader,
+    LayoutComponent,
   ],
 })
 export class AdminPage {
   expanded = signal(false);
+
+  links: SidebarLink[] = [
+    { path: 'analytics', name: 'Analytics' },
+    { path: 'settings', name: 'Settings' },
+    { path: 'products', name: 'Products' },
+  ];
 
   toggleSidenav() {
     this.expanded.set(!this.expanded());

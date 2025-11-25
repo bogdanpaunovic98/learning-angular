@@ -41,6 +41,11 @@ export interface LoggedInUserInfo {
 
 export type ProductStatus = 'AVAILABLE' | 'NOT_AVAILABLE';
 
+export const productStatus: Record<ProductStatus, string> = {
+  AVAILABLE: 'Available',
+  NOT_AVAILABLE: 'Not Available',
+};
+
 export interface Product {
   id: number;
   name: string;
@@ -129,4 +134,19 @@ export interface ProductPayloadFormControlValues {
 
 export interface UpdateProductPayload extends ProductPayload {
   id: string;
+}
+
+export interface SidebarLink {
+  path: string;
+  name: string;
+}
+
+export interface ProductOverview {
+  id: number;
+  name: string;
+  price: number;
+  status: ProductStatus;
+  images: string[];
+  brandName: string;
+  productSubCategory: Partial<ProductSubCategory>;
 }

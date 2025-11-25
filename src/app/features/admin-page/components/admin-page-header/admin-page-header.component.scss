@@ -2,5 +2,12 @@
   position: fixed;
   top: 0;
   z-index: 100;
+}
+
+.sidenav-expanded {
+  width: calc(100% - 250px);
+}
+
+.sidenav-collapsed {
   width: calc(100% - 74px);
 }

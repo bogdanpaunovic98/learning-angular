@@ -16,6 +16,8 @@ import { AuthService } from '@src/app/features/auth/services/auth.service';
 import { LoadingService } from '@src/app/shared/services/loading.service';
 import { finalize } from 'rxjs';
 import { Router } from '@angular/router';
+import { redirectLoggedInUser } from '@src/app/features/auth/utils/redirectLoggedInUser';
+import { CheckLoginService } from '@src/app/shared/services/check-login.service';
 
 @Component({
   selector: 'registration',
@@ -24,7 +26,6 @@ import { Router } from '@angular/router';
   imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule],
 })
 export class Registration {
-  private router = inject(Router);
   registrationForm = new FormGroup(
     {
       username: new FormControl('', {
@@ -77,6 +78,8 @@ export class Registration {
 
   private authService = inject(AuthService);
   private loadingService = inject(LoadingService);
+  private router = inject(Router);
+  private checkLoginService = inject(CheckLoginService);
 
   onRegister(): void {
     this.loadingService.show();
@@ -86,8 +89,9 @@ export class Registration {
         finalize(() => this.loadingService.hide()), // Always runs, success or error
       )
       .subscribe({
-        next: (response: string) => {
-          this.router.navigate(['/admin-page']);
+        next: () => {
+          console.log('Registration successfully registered!');
+          redirectLoggedInUser(this.router, this.checkLoginService);
         },
       });
   }

@@ -35,6 +35,7 @@ import { MatIcon } from '@angular/material/icon';
 import { DeleteProductDialog } from '@src/app/features/admin-page/components/products/components/delete-product-dialog/delete-product-dialog.component';
 import { EditProductForm } from '@src/app/features/admin-page/components/products/components/edit-product-form/edit-product-form.component';
 import { AddProductForm } from '@src/app/features/admin-page/components/products/components/add-product-form/add-product-form.component';
+import { productStatus } from '@src/app/core/model/types.model';
 
 @Component({
   selector: 'products',
@@ -59,11 +60,6 @@ import { AddProductForm } from '@src/app/features/admin-page/components/products
 })
 export class Products implements OnInit {
   DISPLAYED_COLUMNS: string[] = ['name', 'price', 'photo', 'brand', 'status', 'actions'];
-
-  productStatus: Record<ProductStatus, string> = {
-    AVAILABLE: 'Available',
-    NOT_AVAILABLE: 'Not Available',
-  };
 
   filterForm = new FormGroup<ProductFilterForm>(
     {
@@ -129,7 +125,7 @@ export class Products implements OnInit {
   }
 
   getProductStatus(status: ProductStatus) {
-    return this.productStatus[status];
+    return productStatus[status];
   }
 
   getStatusColor(status: ProductStatus) {
