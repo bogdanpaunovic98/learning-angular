@@ -1,4 +1,6 @@
-<header class="!h-[3rem] !bg-[aqua] !flex !items-center !justify-between fixed">
-  <h1>Header</h1>
+<header
+  class="h-[3rem] bg-[aqua] flex items-center justify-end fixed !transition-[width] !duration-300 !ease-[cubic-bezier(0.42,0,0.58,1)]"
+  [class]="expanded() ? 'sidenav-expanded' : 'sidenav-collapsed'"
+>
   <button mat-raised-button (click)="onLogout()">Logout</button>
 </header>

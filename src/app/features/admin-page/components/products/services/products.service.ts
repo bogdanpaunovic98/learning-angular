@@ -1,7 +1,14 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Brand, Category, Product } from '@src/app/core/model/types.model';
+import {
+  Brand,
+  Category,
+  Product,
+  ProductData,
+  ProductPayload,
+  UpdateProductPayload,
+} from '@src/app/core/model/types.model';
 
 @Injectable({
   providedIn: 'root',
@@ -24,5 +31,27 @@ export class ProductsService {
 
   fetchCategories() {
     return this.http.get<Category[]>('/product-categories');
+  }
+
+  deleteProduct(id: number) {
+    return this.http.delete(`/products/${id}`);
+  }
+
+  fetchProductById(id: number) {
+    return this.http.get<ProductData>(`/products/${id}`);
+  }
+
+  updateProduct(product: UpdateProductPayload) {
+    return this.http.put('/products', product);
+  }
+
+  addNewProduct(payload: ProductPayload) {
+    return this.http.post('/products', payload);
+  }
+
+  addMultipleNewProducts(payload: ProductPayload[]) {
+    return this.http.post('/products/multiple', {
+      products: payload,
+    });
   }
 }

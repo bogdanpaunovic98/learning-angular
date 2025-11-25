@@ -41,6 +41,11 @@ export interface LoggedInUserInfo {
 
 export type ProductStatus = 'AVAILABLE' | 'NOT_AVAILABLE';
 
+export const productStatus: Record<ProductStatus, string> = {
+  AVAILABLE: 'Available',
+  NOT_AVAILABLE: 'Not Available',
+};
+
 export interface Product {
   id: number;
   name: string;
@@ -83,4 +88,65 @@ export interface Category {
   id: number;
   categoryName: string;
   subCategories: Subcategory[];
+}
+
+export interface EditProductFormI {
+  name: FormControl<string>;
+  price: FormControl<number>;
+  quantity: FormControl<number>;
+}
+
+export interface ProductSubCategory {
+  id: number;
+  subCategoryName: string;
+  category: Partial<Category>;
+}
+
+export interface ProductData {
+  id: number;
+  name: string;
+  price: number;
+  quantity: number;
+  images: string[];
+  brand: Brand;
+  productSubCategory: ProductSubCategory;
+}
+
+export interface ProductPayload {
+  name: string;
+  price: number;
+  quantity: number;
+  brand: {
+    id: number;
+  };
+  productSubCategory: {
+    id: number;
+  };
+}
+
+export interface ProductPayloadFormControlValues {
+  name: FormControl<string>;
+  price: FormControl<number | null>;
+  quantity: FormControl<number>;
+  brand: FormControl<{ id: number } | null>;
+  productSubCategory: FormControl<{ id: number } | null>;
+}
+
+export interface UpdateProductPayload extends ProductPayload {
+  id: string;
+}
+
+export interface SidebarLink {
+  path: string;
+  name: string;
+}
+
+export interface ProductOverview {
+  id: number;
+  name: string;
+  price: number;
+  status: ProductStatus;
+  images: string[];
+  brandName: string;
+  productSubCategory: Partial<ProductSubCategory>;
 }

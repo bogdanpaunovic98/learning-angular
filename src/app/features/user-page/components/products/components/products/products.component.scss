@@ -1,0 +1,18 @@
+.products-container {
+  padding: 1rem;
+  height: calc(100vh - 3rem);
+  overflow-x: auto;
+}
+
+.button-container {
+  display: flex;
+  gap: 1rem;
+}
+
+.product-link {
+  color: #3498db;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

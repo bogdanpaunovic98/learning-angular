@@ -1,0 +1,41 @@
+.container {
+  padding: 1rem 2rem 2rem 2rem;
+  overflow-x: auto;
+  max-height: 800px;
+}
+
+.title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.add-product-form {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.form-field-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field {
+  max-height: fit-content;
+}
+
+.delete-button {
+  margin-top: 0.5rem;
+}
+
+.add-button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.button-container {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}

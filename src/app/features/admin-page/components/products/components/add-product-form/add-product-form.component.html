@@ -1,0 +1,110 @@
+<div class="container">
+  <h3 class="title">Filters</h3>
+  @for (productForm of newProducts.controls; track $index) {
+    <form class="add-product-form" [formGroup]="productForm">
+      <div class="form-field-container">
+        <mat-form-field class="form-field">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" required />
+          @if (
+            productForm.controls.name.touched && productForm.errors && productForm.hasError('name')
+          ) {
+            <mat-error>{{ productForm.errors['name'] }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="form-field-container">
+        <mat-form-field class="form-field">
+          <mat-label>Price</mat-label>
+          <input
+            matInput
+            type="number"
+            [min]="0.01"
+            [step]="0.01"
+            formControlName="price"
+            required
+          />
+          @if (
+            productForm.controls.price.touched &&
+            productForm.errors &&
+            productForm.hasError('price')
+          ) {
+            <mat-error>{{ productForm.errors['price'] }}</mat-error>
+          } @else {
+            <mat-hint> Please enter a price per 1 unit of product. </mat-hint>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="form-field-container">
+        <mat-form-field class="form-field">
+          <mat-label>Quantity</mat-label>
+          <input matInput type="number" [min]="0" formControlName="quantity" />
+        </mat-form-field>
+      </div>
+
+      @let brandsAndCategories = brandsAndCategories$ | async;
+      @if (brandsAndCategories) {
+        <div class="form-field-container">
+          <mat-form-field class="form-field">
+            <mat-label>Brands</mat-label>
+            <mat-select formControlName="brand" required>
+              @for (brand of brandsAndCategories.brands; track brand.id) {
+                <mat-option [value]="{ id: brand.id }">{{ brand.brandName }}</mat-option>
+              }
+            </mat-select>
+            @if (
+              productForm.controls.brand.touched &&
+              productForm.errors &&
+              productForm.hasError('brand')
+            ) {
+              <mat-error>{{ productForm.errors['brand'] }}</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="form-field-container">
+          <mat-form-field class="form-field">
+            <mat-label>Subcategories</mat-label>
+            <mat-select formControlName="productSubCategory" required>
+              @for (
+                subcategory of brandsAndCategories.categories | getAllSubcategoriesPipe;
+                track subcategory.id
+              ) {
+                <mat-option [value]="{ id: subcategory.id }">
+                  {{ subcategory.subCategoryName }}
+                </mat-option>
+              }
+            </mat-select>
+            @if (
+              productForm.controls.productSubCategory.touched &&
+              productForm.errors &&
+              productForm.hasError('productSubCategory')
+            ) {
+              <mat-error>{{ productForm.errors['productSubCategory'] }}</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <button
+          matMiniFab
+          class="delete-button"
+          [disabled]="newProducts.length === 1"
+          (click)="newProducts.removeAt($index)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      }
+    </form>
+  }
+  <div class="add-button-container">
+    <button matMiniFab (click)="addProduct()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+  <div class="button-container">
+    <button mat-button mat-dialog-close type="button" matButton="outlined">Cancel</button>
+    <button mat-button type="button" matButton="filled" (click)="asd()">Apply</button>
+  </div>
+</div>

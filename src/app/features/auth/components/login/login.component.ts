@@ -10,6 +10,8 @@ import { LoginResponse } from '@src/app/core/model/types.model';
 import { LoadingService } from '@src/app/shared/services/loading.service';
 import { finalize } from 'rxjs';
 import { Router } from '@angular/router';
+import { redirectLoggedInUser } from '@src/app/features/auth/utils/redirectLoggedInUser';
+import { CheckLoginService } from '@src/app/shared/services/check-login.service';
 
 @Component({
   selector: 'login',
@@ -31,19 +33,20 @@ export class Login {
 
   private router = inject(Router);
 
-  private loginService = inject(AuthService);
+  private authService = inject(AuthService);
   private loadingService = inject(LoadingService);
 
   onLogin(): void {
     this.loadingService.show();
-    this.loginService
+    this.authService
       .login(this.loginForm.getRawValue())
       .pipe(
         finalize(() => this.loadingService.hide()), // Always runs, success or error
       )
       .subscribe({
-        next: () => {
-          this.router.navigate(['/admin-page']);
+        next: (response) => {
+          const redirectPath = response.role === 'ADMINISTRATOR' ? '/admin-page' : '/user-page';
+          this.router.navigate([redirectPath]);
         },
       });
   }

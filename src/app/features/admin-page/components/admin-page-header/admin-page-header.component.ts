@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { AdminPageService } from '@src/app/features/admin-page/services/admin-page.service';
 import { MatIconModule } from '@angular/material/icon';
@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
   imports: [MatButtonModule, MatIconModule],
 })
 export class AdminPageHeader {
+  expanded = input<boolean>(false);
   adminPageService = inject(AdminPageService);
   private router = inject(Router);
 
